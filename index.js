@@ -55,6 +55,7 @@ class Push{
         //删除tag
         }else if(event['msgState'] == 4){
             this.statePush['delTag'](event);
+        //全部tags
         }else if(event['msgState'] == 5){
             this.statePush['listTags'](event);
         }
@@ -117,7 +118,7 @@ class Push{
         }
     }
     //全部tags
-    listTags(){
+    listTags(event){
         if (Platform.OS === 'android') {
             this.statePush['listTags'] = event;
             PushObj.listTags();
