@@ -57,7 +57,7 @@ public class PushModule extends ReactContextBaseJavaModule {
 
         //WritableMap params = Arguments.createMap();
         msg.putInt("status", status); //0成功
-        msg.putInt("msgState", msgState); //1 开启推送  2停止推送 3设置tags 4取消tags
+        msg.putInt("msgState", msgState); //1 开启推送  2停止推送 3设置tags 4取消tags 5全部tags
         //params.putString("msg", msg); //json string
         sendEvent(getReactApplicationContext(), "PushStateEvent", msg);
 
@@ -120,6 +120,12 @@ public class PushModule extends ReactContextBaseJavaModule {
 
         PushManager.delTags(getReactApplicationContext(),list);
 
+    }
+
+    //全部Tag
+    @ReactMethod
+    public void listTags(){
+        PushManager.listTags(getReactApplicationContext());
     }
 
 //    //开启精确LBS推送模式

@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushMessageReceiver;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class MyPushMessageReceiver extends PushMessageReceiver {
 
-    private String NAME = "RNBaiduPush";
+    private String NAME = "RNBaiduPush.MyPushMessageReceiver";
     @Override
     public void onBind(Context context, int errorCode, String appid,
                        String userId, String channelId, String requestId) {
@@ -68,11 +69,12 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 
     @Override
     public void onListTags(Context context, int errorCode, List<String> list, String s) {
-        Log.d(NAME, "onListTags");
         WritableMap params = Arguments.createMap();
         params.putInt("error_code", errorCode);
-        String[] tags = list.toArray(new String[list.size()]);
-        WritableArray arr = Arguments.fromJavaArgs(tags);
+        WritableArray arr = new WritableNativeArray();
+        for (String tag : list) {
+            arr.pushString(tag);
+        }
         params.putArray("tags",arr);
         PushModule.myPush.sendState(errorCode,5,params);
     }
