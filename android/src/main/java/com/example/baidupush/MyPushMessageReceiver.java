@@ -129,12 +129,37 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
         customContentString 自定义内容，为空或者json字符串
 
     * */
+    public String getOldValue(Context context, String file, String key) {
+        SharedPreferences sp = context.getSharedPreferences(file, Context.MODE_PRIVATE); //1
+        return sp.getString(key, "[]");
+    }
 
     @Override
     public void onNotificationArrived(Context context, String title, String description, String customContentString) {
 
         Log.d(NAME, "收到通知消息");
+        String file = "wit_player_shared_preferences";
+        String key = "pushes_received";
 
+        String old = getOldValue(context,file,key);
+        String total = "[";
+        String json = "{\"title\":\""+title+"\",\"desc\":\""+description+"\",\"custom\":"+customContentString+"}";
+        if(old=="[]"){
+            total+=json+"]";
+        }else{
+            StringBuilder sb = new StringBuilder(old);
+            sb.deleteCharAt(old.length()-1);
+            sb.append(",");
+            sb.append(json);
+            sb.append("]");
+            total=sb.toString();
+        }
+        //Log.d(NAME, "shareStorage: key="+key+"   value="+json);
+        //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sp = context.getSharedPreferences(file, Context.MODE_PRIVATE);
+        Editor editor = sp.edit();
+        editor.putString(key, total);
+        editor.commit();
 
     }
 }
