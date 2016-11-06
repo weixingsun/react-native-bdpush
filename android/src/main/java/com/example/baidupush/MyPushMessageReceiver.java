@@ -104,7 +104,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
     public void onNotificationClicked(Context context, String title, String description, String customContentString) {
         Log.d(NAME, "已点击通知栏");
         String key = "push_clicked";
-        String json = "{\"title\":\""+title+"\",\"desc\":\""+description+"\",\"custom\":\""+customContentString+"\"}";
+        String json = "{\"title\":\""+title+"\",\"desc\":\""+description+"\",\"custom\":"+customContentString+"}";
         //Log.d(NAME, "shareStorage: key="+key+"   value="+json);
         String SHARED_NAME = "wit_player_shared_preferences";
         //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
