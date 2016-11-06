@@ -144,7 +144,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
         String old = getOldValue(context,file,key);
         String total = "[";
         String json = "{\"title\":\""+title+"\",\"desc\":\""+description+"\",\"custom\":"+customContentString+"}";
-        if(old=="[]"){
+        if(old.equals("[]")){
             total+=json+"]";
         }else{
             StringBuilder sb = new StringBuilder(old);
