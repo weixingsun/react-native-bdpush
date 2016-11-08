@@ -5,16 +5,16 @@
       location = "container:"
       name = "push">
       <FileRef
-         location = "group:push/BaiDuPush.swift">
+         location = "group:baidupush/BaiDuPush.swift">
       </FileRef>
       <FileRef
-         location = "group:push/BaiDuPushBridge.h">
+         location = "group:baidupush/BaiDuPushBridge.h">
       </FileRef>
       <FileRef
-         location = "group:push/BaiDuPushBridge.m">
+         location = "group:baidupush/BaiDuPushBridge.m">
       </FileRef>
       <FileRef
-         location = "group:push/Push-Bridging-Header.h">
+         location = "group:baidupush/Push-Bridging-Header.h">
       </FileRef>
    </Group>
 </Workspace>

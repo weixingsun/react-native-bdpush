@@ -5,6 +5,7 @@
 import React, { PropTypes, Component } from 'react';
 import {
     DeviceEventEmitter,
+    NativeEventEmitter,
     NativeModules,
     Platform,
 } from 'react-native'
@@ -20,29 +21,24 @@ class Push{
         this.pushs = {};
         //状态对象
         this.statePush = {};
-        //接收 透传消息事件
-        DeviceEventEmitter.addListener(
-            'PenetrateEvent', this._PenetrateEvent.bind(this)
-        );
-        //接收 通知消息事件
-        DeviceEventEmitter.addListener(
-            'PushEvent', this._PushEvent.bind(this)
-        );
-        //接收操作状态
-        DeviceEventEmitter.addListener(
-            'PushStateEvent',this._PushStateEvent.bind(this));
-        //初始化推送
-        if (Platform.OS === 'android') {
-            this.statePush['init'] = event;
-            PushObj.initialise();
+        if(Platform.OS==='ios'){
+          const PushModuleEvt = new NativeEventEmitter(PushObj)
+          PushModuleEvt.addListener( 'PenetrateEvent', this._PenetrateEvent.bind(this) )
+          PushModuleEvt.addListener( 'PushEvent', this._PushEvent.bind(this) );
+          PushModuleEvt.addListener( 'PushStateEvent',this._PushStateEvent.bind(this));
+          PushObj.bindChannelWithCompleteHandler(event);
         }else{
-            PushObj.bindChannelWithCompleteHandler(event);
+          DeviceEventEmitter.addListener( 'PenetrateEvent', this._PenetrateEvent.bind(this) );
+          DeviceEventEmitter.addListener( 'PushEvent', this._PushEvent.bind(this) );
+          DeviceEventEmitter.addListener( 'PushStateEvent',this._PushStateEvent.bind(this));
+          PushObj.initialise();
         }
+        this.statePush['init'] = event;
     }
 
     //状态回调
     _PushStateEvent(event){
-        //alert('_PushStateEvent()'+JSON.stringify(event))
+        console.log('EventDataReceived -- RNBaiduPush._PushStateEvent()'+JSON.stringify(event))
         //启动推送
         if(event['msgState'] == 1){
             this.statePush['init'](event);
@@ -80,8 +76,8 @@ class Push{
     //恢复推送
     bindChannelWithCompleteHandler(event){
         //初始化推送
+        this.statePush['init'] = event;
         if (Platform.OS === 'android') {
-            this.statePush['init'] = event;
             PushObj.resumeWork();
         }else{
             PushObj.bindChannelWithCompleteHandler(event);
