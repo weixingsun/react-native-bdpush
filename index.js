@@ -22,6 +22,9 @@ class Push{
         //状态对象
         this.statePush = {};
         if(Platform.OS==='ios'){
+          //DeviceEventEmitter.addListener( 'PenetrateEvent', this._PenetrateEvent.bind(this) );
+          //DeviceEventEmitter.addListener( 'PushEvent', this._PushEvent.bind(this) );
+          //DeviceEventEmitter.addListener( 'PushStateEvent',this._PushStateEvent.bind(this));
           const PushModuleEvt = new NativeEventEmitter(PushObj)
           PushModuleEvt.addListener( 'PenetrateEvent', this._PenetrateEvent.bind(this) )
           PushModuleEvt.addListener( 'PushEvent', this._PushEvent.bind(this) );
@@ -38,22 +41,24 @@ class Push{
 
     //状态回调
     _PushStateEvent(event){
-        console.log('EventDataReceived -- RNBaiduPush._PushStateEvent()'+JSON.stringify(event))
+        let json=event
+        if(typeof json==='string') json=JSON.parse(event)
+        //console.log('bdpush index.js _PushStateEvent() -- msgState='+json.msgState+'\njson='+json)
         //启动推送
-        if(event['msgState'] == 1){
-            this.statePush['init'](event);
+        if(json['msgState'] == 1){
+            this.statePush['init'](json);
         //停止推送
-        }else if(event['msgState'] == 2){
-            this.statePush['uninit'](event);
+        }else if(json['msgState'] == 2){
+            this.statePush['uninit'](json);
         //设置tag
-        }else if(event['msgState'] == 3){
-            this.statePush['setTag'](event);
+        }else if(json['msgState'] == 3){
+            this.statePush['setTag'](json);
         //删除tag
-        }else if(event['msgState'] == 4){
-            this.statePush['delTag'](event);
+        }else if(json['msgState'] == 4){
+            this.statePush['delTag'](json);
         //全部tags
-        }else if(event['msgState'] == 5){
-            this.statePush['listTags'](event);
+        }else if(json['msgState'] == 5){
+            this.statePush['listTags'](json);
         }
     }
 
@@ -86,8 +91,8 @@ class Push{
 
     //停止推送
     unbindChannelWithCompleteHandler(event){
+        this.statePush['uninit'] = event;
         if (Platform.OS === 'android') {
-            this.statePush['uninit'] = event;
             PushObj.stopWork();
         }else{
             PushObj.unbindChannelWithCompleteHandler(event);
@@ -96,8 +101,8 @@ class Push{
 
     //设置tags
     setTag(tags,event) {
+        this.statePush['setTag'] = event;
         if (Platform.OS === 'android') {
-            this.statePush['setTag'] = event;
             PushObj.setTags(tags);
         }else{
             PushObj.setTag(tags, event)
@@ -106,8 +111,8 @@ class Push{
 
     //删除tags
     delTag(tags,event) {
+        this.statePush['delTag'] = event;
         if (Platform.OS === 'android') {
-            this.statePush['delTag'] = event;
             PushObj.delTags(tags);
         }else{
             PushObj.delTag(tags, event)
@@ -115,8 +120,8 @@ class Push{
     }
     //全部tags
     listTags(event){
+        this.statePush['listTags'] = event;
         if (Platform.OS === 'android') {
-            this.statePush['listTags'] = event;
             PushObj.listTags();
         }else{
             PushObj.listTags(event)

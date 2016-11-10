@@ -14,5 +14,6 @@ RCT_EXTERN_METHOD(bindChannelWithCompleteHandler:(RCTResponseSenderBlock)callbac
 RCT_EXTERN_METHOD(unbindChannelWithCompleteHandler:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(setTag:(NSString*)tags callback:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(delTag:(NSString*)tags callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(listTags:(RCTResponseSenderBlock)callback)
 
 @end
