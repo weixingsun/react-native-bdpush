@@ -172,13 +172,9 @@ class BaiDuPush: RCTEventEmitter {
       BPush.listTags(completeHandler: {(result:Any?, error:Error?) in
         // 确认是否删除成功
         var ret = ["error_code":"-1","msgState":"5","tags":[]] as [String : Any]
-        //let request_id = JSON(result!)["request_id"].string!
-        if let tags_arr:[Dictionary]=JSON(result!)["response_params"]["tags"].array! {
-          print("swift layer tags listed:\(tags_arr)")
-          if tags_arr.count > 0 {
-            ret = ["error_code":"0","msgState":"5","tags": tags_arr]
-          }
-        }
+        let tag_names = JSON(result!)["response_params"]["tags"].arrayValue.map({$0["name"].stringValue})
+        print("swift layer tags listed:\(tag_names)")
+        ret = ["error_code":"-1","msgState":"5","tags":tag_names]
         self.stateChange(JSON(ret).rawString()!,state: 3)
       })
     }
