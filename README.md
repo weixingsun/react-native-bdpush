@@ -46,6 +46,11 @@ react-native百度云推送
 
 # 
 
+- `listTags` - 列出所有tags
+    - `@param` - Function - 回调函数
+        - `@param` - int - 状态
+
+# 
 
 ### 使用实例
 
