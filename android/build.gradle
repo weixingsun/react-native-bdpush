@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -18,16 +18,16 @@ android {
     }
     sourceSets.main {
         jni.srcDirs = [] // This prevents the auto generation of Android.mk
-        jniLibs.srcDirs = ['jniLibs']
+        jniLibs.srcDirs = ['libs']
     }
 }
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
+    //testCompile 'junit:junit:4.12'
     compile "com.facebook.react:react-native:+"
-    compile files('libs/pushservice-5.1.0.48.jar')
+    compile files('libs/pushservice-5.3.0.99.jar')
 
 
 }
