@@ -24,12 +24,28 @@ class BaiDuPush: RCTEventEmitter {
   //收到透传推送消息
   static func receivePushMessages(_ msg:String){
     DispatchQueue.main.async{
-      print("收到消息")
+      //print("收到消息")
       let dic = ["msg":msg,"state":1] as [String : Any];
       NotificationCenter.default.post(name: Notification.Name(rawValue: "NotificationIdentifier"), object: dic)
     }
   }
-  
+  static func saveNotificationMessages(_ msg:NSDictionary){
+    var json = JSON(msg)
+    if let type=json["t"].string {  //["custom_content"]["t"]
+      //UserDefaults.standard.setValue(msg, forKey: "push_list:\(type)");
+      //let ud = UserDefaults.init(suiteName: "com.share")!
+      let key = "push_list:\(type)"
+      var oldarray = UserDefaults.standard.array(forKey: key) //json string array
+      if((oldarray) != nil){
+        oldarray!.append(json.rawString()!)
+      }else {
+        oldarray = [String]()
+        oldarray?.append(json.rawString()!)
+      }
+      UserDefaults.standard.set(oldarray, forKey: key)
+      UserDefaults.standard.synchronize()
+    }
+  }
   //收到通知推送消息
   static func pushNotificationMessages(_ msg:String){
     DispatchQueue.main.async{
@@ -144,10 +160,11 @@ class BaiDuPush: RCTEventEmitter {
       BPush.setTag(tags, withCompleteHandler: { (result:Any?, error:Error?) in
         // 确认是否设置成功
         //let error_code = (result as AnyObject).object(forKey:"error_code") as! String
-        let error_code = JSON(result!)["error_code"].string!
-        ret = ["error_code":error_code,"msgState":"3",]
-        print("set tags error_code=\(error_code)")
-        self.stateChange(JSON(ret).rawString()!,state: 3)
+        if let error_code = JSON(result!)["error_code"].string{
+          ret = ["error_code":error_code,"msgState":"3",]
+          print("set tags error_code=\(error_code)")
+          self.stateChange(JSON(ret).rawString()!,state: 3)
+        } //else channel id is not number
       })
     }
   }
@@ -159,10 +176,11 @@ class BaiDuPush: RCTEventEmitter {
       BPush.delTag(tags, withCompleteHandler: { (result:Any?, error:Error?) in
         // 确认是否删除成功
         //let error_code = (result as AnyObject).object(forKey:"error_code") as! String
-        let error_code = JSON(result!)["error_code"].string!
-        ret = ["error_code":error_code,"msgState":"4",]
-        print("tags 删除成功")
-        self.stateChange(JSON(ret).rawString()!,state: 3)
+        if let error_code = JSON(result!)["error_code"].string {
+          ret = ["error_code":error_code,"msgState":"4",]
+          print("tags 删除成功")
+          self.stateChange(JSON(ret).rawString()!,state: 3)
+        }
       })
     }
   }
