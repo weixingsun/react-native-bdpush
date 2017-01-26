@@ -1,0 +1,15 @@
+{
+  "name": "react-native-bdpush",
+  "version": "1.0.1",
+  "description": "baidu push API module for react-native",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weixingsun/react-native-bdpush/"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Weixing Sun",
+    "email": "weixing.sun@gmail.com"
+  }
+}
